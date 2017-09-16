@@ -1,3 +1,3 @@
 # CS 256 Homework 1
 
-Build a perceptron in Python from scratch.
+Build a single-layer perceptron in Python from scratch.

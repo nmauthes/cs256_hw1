@@ -1,13 +1,16 @@
 import re
 
+from vector_operations import *
+
 from math import tanh
+import random
 
 def perceptron(x, w, err, theta):
     if err > 0:
-        w = sub(x, w)
+        w = v_sub(x, w)
         theta = theta + 1
     elif err < 0:
-        w = add(x, w)
+        w = v_add(x, w)
         theta = theta - 1
 
     return w, theta
@@ -38,22 +41,20 @@ def get_update_function(name):
     else:
         raise
 
-def parse_ground(filename):
+# def parse_ground_file(ground_file):
+#     with open(ground_file, 'r') as f:
+#         for line in f:
+#             if line.rstrip() == 'NBF':
+#                 fn = line + next(f)
+#
+#     return fn
+
+def generate_ground_function(ground):
     print 'TODO'
 
 def generate_training_data():
     print 'TODO'
 
-
-''' Vector ops '''
-def add(v1, v2):
-    return list(x + y for x, y in zip(v1, v2))
-
-def sub(v1, v2):
-    return list(x - y for x, y in zip(v1, v2))
-
-def dot(v1, v2):
-    return sum(x * y for x, y in zip(v1, v2))
 
 def run(args):
     print 'TODO'

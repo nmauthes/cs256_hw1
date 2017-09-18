@@ -4,6 +4,8 @@ from vector_operations import *
 
 from math import tanh
 import random
+import sys
+
 
 def perceptron(x, w, err, theta):
     if err > 0:
@@ -15,6 +17,7 @@ def perceptron(x, w, err, theta):
 
     return w, theta
 
+
 def winnow(x, w, err, theta = 1, alpha=2):
     if err > 0:
         w = list(alpha ** -i * j for i, j in zip(x, w))
@@ -22,6 +25,7 @@ def winnow(x, w, err, theta = 1, alpha=2):
         w = list(alpha ** i * j for i, j in zip(x, w))
 
     return w, theta
+
 
 def get_activation_function(name):
     if name == 'threshold':
@@ -32,6 +36,7 @@ def get_activation_function(name):
         return lambda x, theta: max(0, x - theta)
     else:
         raise
+
 
 def get_update_function(name):
     if name == 'perceptron':
@@ -49,12 +54,26 @@ def get_update_function(name):
 #
 #     return fn
 
+
 def generate_ground_function(ground):
     print 'TODO'
+
 
 def generate_training_data():
     print 'TODO'
 
 
-def run(args):
-    print 'TODO'
+def main():
+    num_args = len(sys.argv)
+    if num_args != 8:
+        print 'INCORRECT PARAMETERS'
+        print sys.argv
+        return
+    print sys.argv[1]
+    # activation = get_activation_function(sys.argv[0])
+    # training_alg = get_update_function(sys.argv[1])
+
+
+if __name__ == "__main__":
+    main()
+

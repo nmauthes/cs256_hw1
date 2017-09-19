@@ -1,6 +1,4 @@
-import re
-
-from vector_operations import *
+import vector_operations as vops
 
 from math import tanh
 import random
@@ -10,10 +8,10 @@ import re
 
 def perceptron(x, w, err, theta):
     if err > 0:
-        w = v_sub(x, w)
+        w = vops.sub(x, w)
         theta = theta + 1
     elif err < 0:
-        w = v_add(x, w)
+        w = vops.add(x, w)
         theta = theta - 1
 
     return w, theta
@@ -49,29 +47,82 @@ def get_update_function(name):
 
 
 def parse_ground_file(ground_file):
-    # iterate through the regex and have a lambda for each iteration
-    with open(ground_file, 'r') as f:
-        for line in f:
-            if line.rstrip() == 'NBF':
-                fn = line + next(f)
+    f = open(ground_file)
+    lines = f.readlines()
+    f.close()
 
-    return fn
+    fn_name = lines[0].rstrip()
 
+    global _ground_fn_type
+    if fn_name == 'NBF':
+        _ground_fn_type = 'NBF'
+    elif fn_name == 'TF':
+        _ground_fn_type = 'TF'
+    else:
+        raise Exception('File not parseable')
+
+    parsed = [str.split() for str in lines]
+
+    return [e for sub in parsed for e in sub] # Flatten list
 
 def generate_ground_function(ground):
-    print 'TODO'
+    if ground[0] == 'NBF':
+        func = build_NBF(ground[1:])
+        return lambda x: eval(func)
+    elif ground[0] == 'TF':
+        func = build_TF(ground[1:])
+        return lambda x: eval(func)
+    else:
+        raise
 
 
-def generate_training_data():
+def build_NBF(params): # Build string to eval as function
     print 'TODO'
+
+def build_TF(params):
+    function = ''
+
+    for i, p in enumerate(params[1:]):
+        function += p + '*x[' + str(i) +']'
+
+    function += '>=' + params[0]
+
+    global _num_inputs
+    _num_inputs = len(params) - 1
+
+    return function
+
+
+def generate_training_data(ground_fn, dist, num_train):
+    random_func = None
+    if dist == 'bool' or _ground_fn_type == 'NBF':
+        random_func = 'random.randint(0, 1)' # better way to do this?
+    elif dist == 'sphere':
+        random_func = 'random.random()'
+    else:
+        raise
+
+    training_data = []
+    for n in range(0, num_train):
+        inputs = [eval(random_func) for m in range(0, _num_inputs)]
+
+        if dist == 'sphere':
+            vops.normalize(inputs) # TODO normalize doesn't seem to be working properly
+
+        training_data.append((inputs, ground_fn(inputs)))
+
+    print training_data
 
 
 def main():
+    func = generate_ground_function(parse_ground_file('ground_test.txt')) # test code
+    generate_training_data(func, 'bool', 10)
+
     num_args = len(sys.argv)
     if num_args != 8:
-        print 'Incorrect number of params ' + sys.argv
-        raise SystemExit(1)
-
+        print 'INCORRECT PARAMETERS'
+        print sys.argv
+        return
     print sys.argv[1]
 
     activation = get_activation_function(sys.argv[1])

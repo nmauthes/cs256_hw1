@@ -94,7 +94,6 @@ def build_TF(params):
 
 
 def generate_training_data(ground_fn, dist, num_train):
-    random_func = None
     if dist == 'bool' or _ground_fn_type == 'NBF':
         random_func = 'random.randint(0, 1)' # better way to do this?
     elif dist == 'sphere':

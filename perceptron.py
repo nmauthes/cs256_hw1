@@ -108,11 +108,11 @@ def generate_training_data(ground_fn, dist, num_train):
         inputs = [eval(random_func) for m in range(0, _num_inputs)]
 
         if dist == 'sphere':
-            vops.normalize(inputs) # TODO normalize doesn't seem to be working properly
+            inputs = vops.normalize(inputs)
 
         training_data.append((inputs, ground_fn(inputs)))
 
-    print training_data
+    return training_data
 
 
 def main():
@@ -131,7 +131,7 @@ def main():
     epsilon = sys.argv[7]
 
     func = generate_ground_function(ground_file_name)  # test code
-    generate_training_data(func, 'bool', 10)
+    generate_training_data(func, 'sphere', 10)
 
 
 if __name__ == "__main__":

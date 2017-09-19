@@ -4,7 +4,6 @@ from math import tanh
 import random
 import sys
 
-
 def perceptron(x, w, err, theta):
     if err > 0:
         w = vops.sub(x, w)
@@ -51,7 +50,12 @@ def parse_ground_file(ground_file):
 
     fn_name = lines[0].rstrip()
 
-    if fn_name != 'NBF' and fn_name != 'TF':
+    global _ground_fn_type
+    if fn_name == 'NBF':
+        _ground_fn_type = 'NBF'
+    elif fn_name == 'TF':
+        _ground_fn_type = 'TF'
+    else:
         raise Exception('File not parseable')
 
     parsed = [str.split() for str in lines]
@@ -60,9 +64,11 @@ def parse_ground_file(ground_file):
 
 def generate_ground_function(ground):
     if ground[0] == 'NBF':
-        return lambda x: eval(build_NBF(ground[1:]))
+        func = build_NBF(ground[1:])
+        return lambda x: eval(func)
     elif ground[0] == 'TF':
-        return lambda x: eval(build_TF(ground[1:]))
+        func = build_TF(ground[1:])
+        return lambda x: eval(func)
     else:
         raise
 
@@ -78,17 +84,30 @@ def build_TF(params):
 
     function += '>=' + params[0]
 
+    global _num_inputs
+    _num_inputs = len(params) - 1
+
     return function
 
-def generate_training_data():
-    print 'TODO'
+def generate_training_data(ground_fn, dist, num_train):
+    random_func = None
+    if dist == 'bool' or _ground_fn_type == 'NBF':
+        random_func = random.randint(0, 1)
+    elif dist == 'sphere':
+        random_func = random.random()
+
+    training_data = [] # WIP
+    for n in range(0, num_train):
+        inputs = [random_func for m in range(0, _num_inputs)]
+        print inputs
+
 
 
 def main():
     input = [1, 1, 1] # test code
     func = generate_ground_function(parse_ground_file('ground_test.txt'))
 
-    print(func(input))
+    generate_training_data(func, 'bool', 10)
 
     num_args = len(sys.argv)
     if num_args != 8:

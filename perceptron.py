@@ -46,14 +46,17 @@ def get_update_function(name):
     else:
         raise
 
-# def parse_ground_file(ground_file):
-#     with open(ground_file, 'r') as f:
-#         for line in f:
-#             if line.rstrip() == 'NBF':
-#                 fn = line + next(f)
-#
-#     return fn
+def parse_ground_file(ground_file):
+    f = open(ground_file)
+    lines = f.readlines()
+    f.close()
 
+    fn_name = lines[0].rstrip()
+
+    if fn_name != 'NBF' and fn_name != 'TF':
+        raise Exception('File not parseable')
+
+    return [str.split() for str in lines[1:len(lines)]] # Might want to flatten list before passing to fn generator
 
 def generate_ground_function(ground):
     print 'TODO'

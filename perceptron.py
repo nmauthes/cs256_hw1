@@ -3,6 +3,8 @@ import vector_operations as vops
 from math import tanh
 import random
 import sys
+import re
+
 
 def perceptron(x, w, err, theta):
     if err > 0:
@@ -42,6 +44,7 @@ def get_update_function(name):
         return winnow
     else:
         raise
+
 
 def parse_ground_file(ground_file):
     f = open(ground_file)
@@ -89,6 +92,7 @@ def build_TF(params):
 
     return function
 
+
 def generate_training_data(ground_fn, dist, num_train):
     if dist == 'bool' or _ground_fn_type == 'NBF':
         random_func = 'random.randint(0, 1)' # better way to do this?
@@ -109,7 +113,6 @@ def generate_training_data(ground_fn, dist, num_train):
     return training_data
 
 
-
 def main():
     func = generate_ground_function(parse_ground_file('ground_test.txt')) # test code
     print generate_training_data(func, 'sphere', 10)
@@ -120,8 +123,14 @@ def main():
         print sys.argv
         return
     print sys.argv[1]
-    # activation = get_activation_function(sys.argv[0])
-    # training_alg = get_update_function(sys.argv[1])
+
+    activation = get_activation_function(sys.argv[1])
+    training_alg = get_update_function(sys.argv[2])
+    ground_file = parse_ground_file(sys.argv[3])
+    distribution = sys.argv[4]
+    num_train = sys.argv[5]
+    num_test = sys.argv[6]
+    epsilon = sys.argv[7]
 
 
 if __name__ == "__main__":

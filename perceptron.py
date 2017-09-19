@@ -124,14 +124,14 @@ def main():
 
     activation = get_activation_function(sys.argv[1])
     training_alg = get_update_function(sys.argv[2])
-    ground_file = parse_ground_file(sys.argv[3])
+    ground_file_name = parse_ground_file(sys.argv[3])
     distribution = sys.argv[4]
     num_train = sys.argv[5]
     num_test = sys.argv[6]
     epsilon = sys.argv[7]
 
     func = generate_ground_function(ground_file_name)  # test code
-    generate_training_data(func, 'sphere', 10)
+    print generate_training_data(func, 'sphere', 10)
 
 
 if __name__ == "__main__":

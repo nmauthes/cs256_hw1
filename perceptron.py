@@ -65,7 +65,9 @@ def parse_ground_file(ground_file):
 
     return [e for sub in parsed for e in sub] # Flatten list
 
-def generate_ground_function(ground):
+
+def generate_ground_function(ground_file_name):
+    ground = parse_ground_file(ground_file_name)
     if ground[0] == 'NBF':
         func = build_NBF(ground[1:])
         return lambda x: eval(func)
@@ -114,15 +116,11 @@ def generate_training_data(ground_fn, dist, num_train):
 
 
 def main():
-    func = generate_ground_function(parse_ground_file('ground_test.txt')) # test code
-    generate_training_data(func, 'bool', 10)
-
     num_args = len(sys.argv)
     if num_args != 8:
         print 'INCORRECT PARAMETERS'
         print sys.argv
         return
-    print sys.argv[1]
 
     activation = get_activation_function(sys.argv[1])
     training_alg = get_update_function(sys.argv[2])
@@ -131,6 +129,9 @@ def main():
     num_train = sys.argv[5]
     num_test = sys.argv[6]
     epsilon = sys.argv[7]
+
+    func = generate_ground_function(ground_file_name)  # test code
+    generate_training_data(func, 'bool', 10)
 
 
 if __name__ == "__main__":

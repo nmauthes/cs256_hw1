@@ -92,21 +92,27 @@ def build_TF(params):
 def generate_training_data(ground_fn, dist, num_train):
     random_func = None
     if dist == 'bool' or _ground_fn_type == 'NBF':
-        random_func = random.randint(0, 1)
+        random_func = 'random.randint(0, 1)' # better way to do this?
     elif dist == 'sphere':
-        random_func = random.random()
+        random_func = 'random.random()'
+    else:
+        raise
 
-    training_data = [] # WIP
+    training_data = []
     for n in range(0, num_train):
-        inputs = [random_func for m in range(0, _num_inputs)]
-        print inputs
+        inputs = [eval(random_func) for m in range(0, _num_inputs)]
+
+        if dist == 'sphere':
+            vops.normalize(inputs) # TODO normalize doesn't seem to be working properly
+
+        training_data.append((inputs, ground_fn(inputs)))
+
+    print training_data
 
 
 
 def main():
-    input = [1, 1, 1] # test code
-    func = generate_ground_function(parse_ground_file('ground_test.txt'))
-
+    func = generate_ground_function(parse_ground_file('ground_test.txt')) # test code
     generate_training_data(func, 'bool', 10)
 
     num_args = len(sys.argv)

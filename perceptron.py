@@ -60,22 +60,36 @@ def parse_ground_file(ground_file):
 
 def generate_ground_function(ground):
     if ground[0] == 'NBF':
-        print 'NBF'
+        return lambda x: eval(build_NBF(ground[1:]))
     elif ground[0] == 'TF':
-        print 'TF'
+        return lambda x: eval(build_TF(ground[1:]))
+    else:
+        raise
 
 
 def build_NBF(params): # Build string to eval as function
     print 'TODO'
 
 def build_TF(params):
-    print 'TODO'
+    function = ''
+
+    for i, p in enumerate(params[1:]):
+        function += p + '*x[' + str(i) +']'
+
+    function += '>=' + params[0]
+
+    return function
 
 def generate_training_data():
     print 'TODO'
 
 
 def main():
+    input = [1, 1, 1] # test code
+    func = generate_ground_function(parse_ground_file('ground_test.txt'))
+
+    print(func(input))
+
     num_args = len(sys.argv)
     if num_args != 8:
         print 'INCORRECT PARAMETERS'

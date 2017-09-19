@@ -3,11 +3,11 @@ from math import sqrt
 # Vector ops
 
 
-def v_add(v1, v2):
+def add(v1, v2):
     return [x + y for x, y in zip(v1, v2)]
 
 
-def v_sub(v1, v2):
+def sub(v1, v2):
     return [x - y for x, y in zip(v1, v2)]
 
 

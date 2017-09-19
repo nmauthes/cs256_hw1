@@ -1,6 +1,4 @@
-import re
-
-from vector_operations import *
+import vector_operations as vops
 
 from math import tanh
 import random
@@ -9,10 +7,10 @@ import sys
 
 def perceptron(x, w, err, theta):
     if err > 0:
-        w = v_sub(x, w)
+        w = vops.sub(x, w)
         theta = theta + 1
     elif err < 0:
-        w = v_add(x, w)
+        w = vops.add(x, w)
         theta = theta - 1
 
     return w, theta
@@ -56,11 +54,22 @@ def parse_ground_file(ground_file):
     if fn_name != 'NBF' and fn_name != 'TF':
         raise Exception('File not parseable')
 
-    return [str.split() for str in lines[1:len(lines)]] # Might want to flatten list before passing to fn generator
+    parsed = [str.split() for str in lines]
+
+    return [e for sub in parsed for e in sub] # Flatten list
 
 def generate_ground_function(ground):
+    if ground[0] == 'NBF':
+        print 'NBF'
+    elif ground[0] == 'TF':
+        print 'TF'
+
+
+def build_NBF(params): # Build string to eval as function
     print 'TODO'
 
+def build_TF(params):
+    print 'TODO'
 
 def generate_training_data():
     print 'TODO'

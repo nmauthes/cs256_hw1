@@ -102,17 +102,17 @@ def generate_training_data(ground_fn, dist, num_train):
         inputs = [eval(random_func) for m in range(0, _num_inputs)]
 
         if dist == 'sphere':
-            vops.normalize(inputs) # TODO normalize doesn't seem to be working properly
+            inputs = vops.normalize(inputs)
 
         training_data.append((inputs, ground_fn(inputs)))
 
-    print training_data
+    return training_data
 
 
 
 def main():
     func = generate_ground_function(parse_ground_file('ground_test.txt')) # test code
-    generate_training_data(func, 'bool', 10)
+    print generate_training_data(func, 'sphere', 10)
 
     num_args = len(sys.argv)
     if num_args != 8:

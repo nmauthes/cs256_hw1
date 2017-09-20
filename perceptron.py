@@ -119,11 +119,11 @@ def build_tf(params):
     for i, p in enumerate(params[1:]):
         func += p + '*x[' + str(i) +']'
 
-        func += '>=' + params[0]
+    func += '>=' + params[0]
 
     global _num_inputs
     _num_inputs = len(params) - 1
-    print func
+
     return func
 
 

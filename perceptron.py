@@ -195,7 +195,7 @@ def test_perceptron(activation, epsilon, testing_data, w, theta):
         print 'TRAINING FAILED'
 
 
-def main():
+def main(num_runs=1):
     num_args = len(sys.argv)
     if num_args != 8:
         print 'INCORRECT PARAMETERS'
@@ -210,19 +210,20 @@ def main():
     num_test = int(sys.argv[6])
     epsilon = float(sys.argv[7])
 
-    func = generate_ground_function(ground_file_name)
-    # if _ground_fn_type == 'NBF':
-    #     print generate_training_data(func, 'bool', 10)
-    # else:
-    #     print generate_training_data(func, distribution, 10)
+    for n in range(0, num_runs):
+        func = generate_ground_function(ground_file_name)
+        # if _ground_fn_type == 'NBF':
+        #     print generate_training_data(func, 'bool', 10)
+        # else:
+        #     print generate_training_data(func, distribution, 10)
 
-    training_data = generate_training_data(func, distribution, num_train)
-    results = train_perceptron(activation, training_alg, training_data)
-    weights = results[0]
-    theta = results[1]
+        training_data = generate_training_data(func, distribution, num_train)
+        results = train_perceptron(activation, training_alg, training_data)
+        weights = results[0]
+        theta = results[1]
 
-    testing_data = generate_training_data(func, distribution, num_test)
-    test_perceptron(activation, epsilon, testing_data, weights, theta)
+        testing_data = generate_training_data(func, distribution, num_test)
+        test_perceptron(activation, epsilon, testing_data, weights, theta)
 
 if __name__ == "__main__":
     main()

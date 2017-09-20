@@ -13,7 +13,7 @@ def perceptron(x, w, err, theta):
     if classification >= 0 and err != 0:  # positive classification
         w = vops.sub(x, w)
         theta = theta + 1
-    elif classification <= 0 and err != 0:  # negative classification
+    elif classification < 0 and err != 0:  # negative classification
         w = vops.add(x, w)
         theta = theta - 1
 
@@ -24,7 +24,7 @@ def winnow(x, w, err, theta, alpha=2):
     classification = vops.dot(x, w)
     if classification >= 0 and err != 0:  # positive classification
         w = list(alpha ** -i * j for i, j in zip(x, w))
-    elif classification <= 0 and err != 0:  # negative classification
+    elif classification < 0 and err != 0:  # negative classification
         w = list(alpha ** i * j for i, j in zip(x, w))
 
     return w, theta

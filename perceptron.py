@@ -129,7 +129,7 @@ def build_tf(params):
 
 def generate_training_data(ground_fn, dist, num_train):
     if dist == 'bool' or __ground_fn_type == 'NBF':
-        random_func = 'random.randint(0, 1)' # better way to do this?
+        random_func = 'random.randint(0, 1)'  # better way to do this?
     elif dist == 'sphere':
         random_func = 'random.random()'
     else:
@@ -155,20 +155,22 @@ def train_perceptron(activation, training_alg, training_data):
         err = abs(y - activation(result, theta))
         new_w, new_theta = training_alg(x, w, err, theta)
 
+        copy_x = []
+        for field in x:
+            copy_x.append(str(field))
+
         if w != new_w:
             w = new_w
             theta = new_theta
-            copy_x = []
-            for field in x:
-                copy_x.append(str(field))
             print ','.join(copy_x) + ':' + str(y) + ':update'
         else:
-            print ','.join(copy_x) + ':' + str(y) + ':no Update'
+            print ','.join(copy_x) + ':' + str(y) + ':no update'
 
         # print 'error:' + str(err)
         # print 'theta:' + str(theta)
 
     return w, theta
+
 
 def test_perceptron(activation, epsilon, testing_data, w, theta):
     errors = []
@@ -188,6 +190,7 @@ def test_perceptron(activation, epsilon, testing_data, w, theta):
         print 'TRAINING SUCCEEDED'
     else:
         print 'TRAINING FAILED'
+
 
 def main():
     num_args = len(sys.argv)

@@ -142,9 +142,9 @@ def train_perceptron(activation, training_alg, training_data):
         if w != new_w:
             w = new_w
             theta = new_theta
-            print 'Updated' # elaborate
+            print str(x) + ':' + str(y) +':Update'
         else:
-            print 'No update'
+            print str(x) + ':' + str(y) +':No Update'
 
 def test_perceptron():
     pass

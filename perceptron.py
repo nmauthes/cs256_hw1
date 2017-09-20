@@ -162,6 +162,8 @@ def train_perceptron(activation, training_alg, training_data):
         else:
             print str(x) + ':' + str(y) + ':No Update'
 
+        print 'error:' + str(err)
+        print 'theta:' + str(theta)
 
 def test_perceptron():
     pass
@@ -188,7 +190,8 @@ def main():
     # else:
     #     print generate_training_data(func, distribution, 10)
 
-    print generate_training_data(func, distribution, 10)
+    training_data = generate_training_data(func, distribution, 100)
+    train_perceptron(activation, training_alg, training_data)
 
 
 if __name__ == "__main__":

@@ -3,7 +3,9 @@ import vector_operations as vops
 from math import tanh
 import random
 import sys
-import re
+
+num_inputs = 0
+ground_fn_type = ''
 
 
 def perceptron(x, w, err, theta):
@@ -79,17 +81,16 @@ def generate_ground_function(ground_file_name):
 
 
 def build_nbf(params):  # Build string to eval as function
-    global _num_inputs
-    if len(params) > 3:
-        _num_inputs = len(params)/2
-    else:
+    if len(params) < 3:
         raise
 
-    num = int(params[0]) - 1
+    num = int(params[0])
     negation = ''
     if num < 0:
         negation = 'not '
         num *= -1
+    num -= 1
+    max_num = num
     func = ' '.join([negation + 'x[' + str(num) + ']'])
 
     iterable = iter(params[1:])
@@ -100,8 +101,14 @@ def build_nbf(params):  # Build string to eval as function
         if num < 0:
             negation = 'not '
             num *= -1
+        num -= 1
+        if num > max_num:
+            max_num = num
         func = ' '.join(['(' + func, operation.lower(), negation + 'x[' + str(num) + '])'])
 
+    global _num_inputs
+    _num_inputs = max_num + 1
+    print(max_num)
     print func
     return func
 
@@ -131,13 +138,14 @@ def generate_training_data(ground_fn, dist, num_train):
     training_data = []
     for n in range(0, num_train):
         inputs = [eval(random_func) for m in range(0, _num_inputs)]
-
+        print(len(inputs))
         if dist == 'sphere':
             inputs = vops.normalize(inputs)
 
         training_data.append((inputs, ground_fn(inputs)))
 
     return training_data
+
 
 def train_perceptron(activation, training_alg, training_data):
     w = [random.random() for n in range(0, _num_inputs)]
@@ -154,6 +162,7 @@ def train_perceptron(activation, training_alg, training_data):
             print str(x) + ':' + str(y) +':Update'
         else:
             print str(x) + ':' + str(y) +':No Update'
+
 
 def test_perceptron():
     pass
@@ -175,7 +184,10 @@ def main():
     epsilon = sys.argv[7]
 
     func = generate_ground_function(ground_file_name)
-    print generate_training_data(func, 'sphere', 10)
+    if _ground_fn_type == 'NBF':
+        print generate_training_data(func, 'bool', 10)
+    else:
+        print generate_training_data(func, distribution, 10)
 
 
 if __name__ == "__main__":

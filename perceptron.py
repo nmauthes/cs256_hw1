@@ -72,7 +72,7 @@ def generate_ground_function(ground_file_name):
     ground = parse_ground_file(ground_file_name)
     if ground[0] == 'NBF':
         func = build_nbf(ground[1:])
-        return lambda x: eval(func)
+        return lambda x: int(eval(func))
     elif ground[0] == 'TF':
         func = build_tf(ground[1:])
         return lambda x: int(eval(func))

@@ -52,7 +52,6 @@ def parse_ground_file(ground_file):
     f.close()
 
     fn_name = lines[0].rstrip()
-    print(fn_name)
 
     global _ground_fn_type
     if fn_name == 'NBF':
@@ -69,7 +68,6 @@ def parse_ground_file(ground_file):
 
 def generate_ground_function(ground_file_name):
     ground = parse_ground_file(ground_file_name)
-    print(ground[0])
     if ground[0] == 'NBF':
         func = build_nbf(ground[1:])
         return lambda x: eval(func)
@@ -81,17 +79,28 @@ def generate_ground_function(ground_file_name):
 
 
 def build_nbf(params):  # Build string to eval as function
-    func = '(x[' + params[0] + '] ' + params[1].lower() + ' x[' + params[2] + '])'
-    print func
-    iterable = iter(params[3:])
+    global _num_inputs
+    if len(params) > 3:
+        _num_inputs = len(params)/2
+    else:
+        raise
+
+    num = int(params[0]) - 1
+    negation = ''
+    if num < 0:
+        negation = 'not '
+        num *= -1
+    func = ' '.join([negation + 'x[' + str(num) + ']'])
+
+    iterable = iter(params[1:])
     for param in iterable:
         operation = param
         num = int(next(iterable))
         negation = ''
         if num < 0:
-            negation = 'not'
+            negation = 'not '
             num *= -1
-        func = ' '.join(['(' + func, negation, operation.lower(), 'x[' + str(num) + '])'])
+        func = ' '.join(['(' + func, operation.lower(), negation + 'x[' + str(num) + '])'])
 
     print func
     return func

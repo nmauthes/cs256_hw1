@@ -103,11 +103,11 @@ def build_tf(params):
     for i, p in enumerate(params[1:]):
         func += p + '*x[' + str(i) +']'
 
-        func += '>=' + params[0]
+    func += '>=' + params[0]
 
     global _num_inputs
     _num_inputs = len(params) - 1
-    print func
+
     return func
 
 
@@ -128,6 +128,7 @@ def generate_training_data(ground_fn, dist, num_train):
 
         training_data.append((inputs, ground_fn(inputs)))
 
+    print training_data
     return training_data
 
 def train_perceptron(activation, training_alg, training_data):
@@ -166,8 +167,8 @@ def main():
     epsilon = sys.argv[7]
 
     func = generate_ground_function(ground_file_name)
-    print generate_training_data(func, 'sphere', 10)
-
+    training_data = generate_training_data(func, 'bool', 1000)
+    train_perceptron(activation, training_alg, training_data)
 
 if __name__ == "__main__":
     main()

@@ -4,8 +4,8 @@ from math import tanh
 import random
 import sys
 
-num_inputs = 0
-ground_fn_type = ''
+__num_inputs = 0
+__ground_fn_type = ''
 
 
 def perceptron(x, w, err, theta):
@@ -55,11 +55,11 @@ def parse_ground_file(ground_file):
 
     fn_name = lines[0].rstrip()
 
-    global _ground_fn_type
+    global __ground_fn_type
     if fn_name == 'NBF':
-        _ground_fn_type = 'NBF'
+        __ground_fn_type = 'NBF'
     elif fn_name == 'TF':
-        _ground_fn_type = 'TF'
+        __ground_fn_type = 'TF'
     else:
         raise Exception('File not parseable')
 
@@ -106,8 +106,8 @@ def build_nbf(params):  # Build string to eval as function
             max_num = num
         func = ' '.join(['(' + func, operation.lower(), negation + 'x[' + str(num) + '])'])
 
-    global _num_inputs
-    _num_inputs = max_num + 1
+    global __num_inputs
+    __num_inputs = max_num + 1
     print 'max_num: ' + str(max_num)
     print 'NBF function: ' + func
     return func
@@ -117,18 +117,18 @@ def build_tf(params):
     func = ''
 
     for i, p in enumerate(params[1:]):
-        func += p + '*x[' + str(i) +']'
+        func += p + '*x[' + str(i) + ']'
 
     func += '>=' + params[0]
 
-    global _num_inputs
-    _num_inputs = len(params) - 1
+    global __num_inputs
+    __num_inputs = len(params) - 1
 
     return func
 
 
 def generate_training_data(ground_fn, dist, num_train):
-    if dist == 'bool' or _ground_fn_type == 'NBF':
+    if dist == 'bool' or __ground_fn_type == 'NBF':
         random_func = 'random.randint(0, 1)' # better way to do this?
     elif dist == 'sphere':
         random_func = 'random.random()'
@@ -137,7 +137,7 @@ def generate_training_data(ground_fn, dist, num_train):
 
     training_data = []
     for n in range(0, num_train):
-        inputs = [eval(random_func) for m in range(0, _num_inputs)]
+        inputs = [eval(random_func) for m in range(0, __num_inputs)]
         if dist == 'sphere':
             inputs = vops.normalize(inputs)
 
@@ -147,7 +147,7 @@ def generate_training_data(ground_fn, dist, num_train):
 
 
 def train_perceptron(activation, training_alg, training_data):
-    w = [random.random() for n in range(0, _num_inputs)]
+    w = [random.random() for n in range(0, __num_inputs)]
     theta = 0.1
 
     for x, y in training_data:
@@ -183,10 +183,12 @@ def main():
     epsilon = sys.argv[7]
 
     func = generate_ground_function(ground_file_name)
-    if _ground_fn_type == 'NBF':
-        print generate_training_data(func, 'bool', 10)
-    else:
-        print generate_training_data(func, distribution, 10)
+    # if _ground_fn_type == 'NBF':
+    #     print generate_training_data(func, 'bool', 10)
+    # else:
+    #     print generate_training_data(func, distribution, 10)
+
+    print generate_training_data(func, distribution, 10)
 
 
 if __name__ == "__main__":

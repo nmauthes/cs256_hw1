@@ -182,7 +182,11 @@ def test_perceptron(activation, epsilon, testing_data, w, theta):
         err = abs(y_actual - y_prediction)
         errors.append(err)
 
-        print str(x) + ':' + str(y_prediction) + ':' + str(y_actual) + ':' + str(err)
+        copy_x = []
+        for field in x:
+            copy_x.append(str(field))
+        
+        print ','.join(copy_x) + ':' + str(y_prediction) + ':' + str(y_actual) + ':' + str(err)
     # print(sum(errors))
     # print(len(errors))
     avg_error = float(sum(errors)) / len(errors)

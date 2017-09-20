@@ -158,9 +158,12 @@ def train_perceptron(activation, training_alg, training_data):
         if w != new_w:
             w = new_w
             theta = new_theta
-            print str(x) + ':' + str(y) + ':Update'
+            copy_x = []
+            for field in x:
+                copy_x.append(str(field))
+            print ','.join(copy_x) + ':' + str(y) + ':update'
         else:
-            print str(x) + ':' + str(y) + ':No Update'
+            print ','.join(copy_x) + ':' + str(y) + ':no Update'
 
         print 'error:' + str(err)
         print 'theta:' + str(theta)

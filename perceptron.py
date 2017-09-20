@@ -152,7 +152,7 @@ def train_perceptron(activation, training_alg, training_data):
 
     for x, y in training_data:
         result = vops.dot(x, w)
-        err = abs(y - activation(result, theta))
+        err = activation(result, theta) - y
         new_w, new_theta = training_alg(x, w, err, theta)
 
         copy_x = []
@@ -181,8 +181,9 @@ def test_perceptron(activation, epsilon, testing_data, w, theta):
         errors.append(err)
 
         print str(x) + ':' + str(y) + ':' + str(actual_y) + ':' + str(err)
-
-    avg_error = sum(errors) / len(errors)
+    print(sum(errors))
+    print(len(errors))
+    avg_error = float(sum(errors)) / len(errors)
     print 'Average error:' + str(avg_error)
     print 'Epsilon:' + str(epsilon)
 

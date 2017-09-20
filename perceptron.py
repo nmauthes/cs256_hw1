@@ -108,8 +108,8 @@ def build_nbf(params):  # Build string to eval as function
 
     global _num_inputs
     _num_inputs = max_num + 1
-    print(max_num)
-    print func
+    print 'max_num: ' + str(max_num)
+    print 'NBF function: ' + func
     return func
 
 
@@ -138,7 +138,6 @@ def generate_training_data(ground_fn, dist, num_train):
     training_data = []
     for n in range(0, num_train):
         inputs = [eval(random_func) for m in range(0, _num_inputs)]
-        print(len(inputs))
         if dist == 'sphere':
             inputs = vops.normalize(inputs)
 
@@ -159,9 +158,9 @@ def train_perceptron(activation, training_alg, training_data):
         if w != new_w:
             w = new_w
             theta = new_theta
-            print str(x) + ':' + str(y) +':Update'
+            print str(x) + ':' + str(y) + ':Update'
         else:
-            print str(x) + ':' + str(y) +':No Update'
+            print str(x) + ':' + str(y) + ':No Update'
 
 
 def test_perceptron():

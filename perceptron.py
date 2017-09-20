@@ -152,7 +152,7 @@ def train_perceptron(activation, training_alg, training_data):
 
     for x, y in training_data:
         result = vops.dot(x, w)
-        err = y - activation(result, theta)
+        err = abs(y - activation(result, theta))
         new_w, new_theta = training_alg(x, w, err, theta)
 
         if w != new_w:
@@ -165,14 +165,29 @@ def train_perceptron(activation, training_alg, training_data):
         else:
             print ','.join(copy_x) + ':' + str(y) + ':no Update'
 
-        print 'error:' + str(err)
-        print 'theta:' + str(theta)
+        # print 'error:' + str(err)
+        # print 'theta:' + str(theta)
 
-    return w
+    return w, theta
 
-def test_perceptron(activation, epsilon, testing_data, w):
-    pass
+def test_perceptron(activation, epsilon, testing_data, w, theta):
+    errors = []
+    for x, y in testing_data:
+        result = vops.dot(x, w)
+        actual_y = activation(result, theta)
+        err = abs(y - actual_y)
+        errors.append(err)
 
+        print str(x) + ':' + str(y) + ':' + str(actual_y) + ':' + str(err)
+
+    avg_error = sum(errors) / len(errors)
+    print 'Average error:' + str(avg_error)
+    print 'Epsilon:' + str(epsilon)
+
+    if avg_error <= epsilon:
+        print 'TRAINING SUCCEEDED'
+    else:
+        print 'TRAINING FAILED'
 
 def main():
     num_args = len(sys.argv)
@@ -196,13 +211,12 @@ def main():
     #     print generate_training_data(func, distribution, 10)
 
     training_data = generate_training_data(func, distribution, num_train)
-    weights = train_perceptron(activation, training_alg, training_data)
+    results = train_perceptron(activation, training_alg, training_data)
+    weights = results[0]
+    theta = results[1]
 
     testing_data = generate_training_data(func, distribution, num_test)
-    test_perceptron(activation, epsilon, testing_data, weights)
-
-
-
+    test_perceptron(activation, epsilon, testing_data, weights, theta)
 
 if __name__ == "__main__":
     main()

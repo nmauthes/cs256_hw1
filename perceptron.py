@@ -165,7 +165,9 @@ def train_perceptron(activation, training_alg, training_data):
         print 'error:' + str(err)
         print 'theta:' + str(theta)
 
-def test_perceptron():
+    return w
+
+def test_perceptron(activation, epsilon, testing_data, w):
     pass
 
 
@@ -180,9 +182,9 @@ def main():
     training_alg = get_update_function(sys.argv[2])
     ground_file_name = sys.argv[3]
     distribution = sys.argv[4]
-    num_train = sys.argv[5]
-    num_test = sys.argv[6]
-    epsilon = sys.argv[7]
+    num_train = int(sys.argv[5])
+    num_test = int(sys.argv[6])
+    epsilon = float(sys.argv[7])
 
     func = generate_ground_function(ground_file_name)
     # if _ground_fn_type == 'NBF':
@@ -190,8 +192,13 @@ def main():
     # else:
     #     print generate_training_data(func, distribution, 10)
 
-    training_data = generate_training_data(func, distribution, 100)
-    train_perceptron(activation, training_alg, training_data)
+    training_data = generate_training_data(func, distribution, num_train)
+    weights = train_perceptron(activation, training_alg, training_data)
+
+    testing_data = generate_training_data(func, distribution, num_test)
+    test_perceptron(activation, epsilon, testing_data, weights)
+
+
 
 
 if __name__ == "__main__":

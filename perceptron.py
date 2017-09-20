@@ -17,7 +17,7 @@ def perceptron(x, w, err, theta):
     return w, theta
 
 
-def winnow(x, w, err, theta = 1, alpha=2):
+def winnow(x, w, err, theta, alpha=2):
     if err > 0:
         w = list(alpha ** -i * j for i, j in zip(x, w))
     elif err < 0:
@@ -75,7 +75,7 @@ def generate_ground_function(ground_file_name):
         return lambda x: eval(func)
     elif ground[0] == 'TF':
         func = build_tf(ground[1:])
-        return lambda x: eval(func)
+        return lambda x: int(eval(func))
     else:
         raise
 
@@ -129,6 +129,25 @@ def generate_training_data(ground_fn, dist, num_train):
         training_data.append((inputs, ground_fn(inputs)))
 
     return training_data
+
+def train_perceptron(activation, training_alg, training_data):
+    w = [random.random() for n in range(0, _num_inputs)]
+    theta = 0.1
+
+    for x, y in training_data:
+        result = vops.dot(x, w)
+        err = y - activation(result, theta)
+        new_w, new_theta = training_alg(x, w, err, theta)
+
+        if w != new_w:
+            w = new_w
+            theta = new_theta
+            print 'Updated' # elaborate
+        else:
+            print 'No update'
+
+def test_perceptron():
+    pass
 
 
 def main():

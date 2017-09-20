@@ -9,10 +9,11 @@ __ground_fn_type = ''
 
 
 def perceptron(x, w, err, theta):
-    if err > 0:
+    classification = vops.dot(x, w)
+    if classification >= 0 and err != 0:  # positive classification
         w = vops.sub(x, w)
         theta = theta + 1
-    elif err < 0:
+    elif classification <= 0 and err != 0:  # negative classification
         w = vops.add(x, w)
         theta = theta - 1
 
@@ -65,7 +66,7 @@ def parse_ground_file(ground_file):
 
     parsed = [line.split() for line in lines]
 
-    return [e for sub in parsed for e in sub] # Flatten list
+    return [e for sub in parsed for e in sub]  # Flatten list
 
 
 def generate_ground_function(ground_file_name):
@@ -152,7 +153,7 @@ def train_perceptron(activation, training_alg, training_data):
 
     for x, y in training_data:
         result = vops.dot(x, w)
-        err = activation(result, theta) - y
+        err = abs(y - activation(result, theta))
         new_w, new_theta = training_alg(x, w, err, theta)
 
         copy_x = []
@@ -174,15 +175,15 @@ def train_perceptron(activation, training_alg, training_data):
 
 def test_perceptron(activation, epsilon, testing_data, w, theta):
     errors = []
-    for x, y in testing_data:
+    for x, y_actual in testing_data:
         result = vops.dot(x, w)
-        actual_y = activation(result, theta)
-        err = abs(y - actual_y)
+        y_prediction = activation(result, theta)
+        err = abs(y_actual - y_prediction)
         errors.append(err)
 
-        print str(x) + ':' + str(y) + ':' + str(actual_y) + ':' + str(err)
-    print(sum(errors))
-    print(len(errors))
+        print str(x) + ':' + str(y_prediction) + ':' + str(y_actual) + ':' + str(err)
+    # print(sum(errors))
+    # print(len(errors))
     avg_error = float(sum(errors)) / len(errors)
     print 'Average error:' + str(avg_error)
     print 'Epsilon:' + str(epsilon)

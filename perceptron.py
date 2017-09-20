@@ -152,7 +152,8 @@ def train_perceptron(activation, training_alg, training_data):
 
     for x, y in training_data:
         result = vops.dot(x, w)
-        err = abs(y - activation(result, theta))
+        actual_y = activation(result, theta)
+        err = abs(y - actual_y)
         new_w, new_theta = training_alg(x, w, err, theta)
 
         if w != new_w:

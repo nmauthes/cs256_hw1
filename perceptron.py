@@ -10,10 +10,10 @@ __ground_fn_type = ''
 
 def perceptron(x, w, err, theta):
     classification = vops.dot(x, w)
-    if classification >= 0 and err != 0:  # positive classification
+    if classification >= theta and err != 0:  # positive classification
         w = vops.sub(x, w)
         theta = theta + 1
-    elif classification < 0 and err != 0:  # negative classification
+    elif classification < theta and err != 0:  # negative classification
         w = vops.add(x, w)
         theta = theta - 1
 
@@ -22,9 +22,9 @@ def perceptron(x, w, err, theta):
 
 def winnow(x, w, err, theta, alpha=2):
     classification = vops.dot(x, w)
-    if classification >= 0 and err != 0:  # positive classification
+    if classification >= theta and err != 0:  # positive classification
         w = list(alpha ** -i * j for i, j in zip(x, w))
-    elif classification < 0 and err != 0:  # negative classification
+    elif classification < theta and err != 0:  # negative classification
         w = list(alpha ** i * j for i, j in zip(x, w))
 
     return w, theta
@@ -110,7 +110,7 @@ def build_nbf(params):  # Build string to eval as function
 
     global __num_inputs
     __num_inputs = max_num + 1
-    print 'max_num: ' + str(max_num)
+    print 'num_inputs: ' + str(__num_inputs)
     print 'NBF function: ' + func
     return func
 
@@ -140,7 +140,7 @@ def generate_training_data(ground_fn, dist, num_train):
     training_data = []
     for n in range(0, num_train):
         inputs = [eval(random_func) for m in range(0, __num_inputs)]
-        if dist == 'sphere':
+        if dist == 'sphere' and __ground_fn_type != 'NBF':
             inputs = vops.normalize(inputs)
 
         training_data.append((inputs, ground_fn(inputs)))

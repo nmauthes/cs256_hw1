@@ -24,4 +24,6 @@ def mag(v1):
 
 
 def normalize(v1):
+    if mag(v1) == 0:
+        return 0
     return [x / mag(v1) for x in v1]
